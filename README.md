@@ -107,6 +107,42 @@ So we now need to develop our front end using this response structure.
 We do not want to wait for the backend api to be developed and running to develop / test our front end.
 CHALLENGE / TROUBLE : How do we achieve this ?
 
+We have identified that we will need 'Json Server' for above requirement.
+Now we need to install this in our project.
+
+CHALLENGE / TROUBLE : how do we install 'Json Server' ?
+'Create react app' that we used to create our react app uses node and npm.
+Within the project we created is a file called : 'package.json'
+This file is like our maven pom file which will contain dependencies.
+
+We can define within this file 'dev dependencies' and 'production dependencies'
+
+We need the JSON server only in development.
+So here is the command we will use :
+npm install json-server --save-dev
+
+This link was 'slightly' useful :
+https://dev.to/mariorodeghiero/json-server-with-reactjs-3chd
+
+So at this stage we have installed 'Json server' as a dev dependency.
+
+#4.2
+We installed some additional dev dependencies :
+npm install chalk --save-dev
+npm install cross-env --save-dev
+
+CHALLENGE / TROUBLE : while trying to commit code we now see that a files called 'package-lock.json' has changed.
+We are not sure if this file needs to be checked in or not .
+Any changes we make in 'package.json' get registered in 'package-lock.json'
+It seems 'package-lock.json' is used to lock dependencies to a specific version number.
+This becomes important because if in 'package.json' we have a dependency defined like this:
+"some_dependency": "^2.12.0"
+So any later version of that dependency when published will be pulled.
+And then you might have problems in your code.
+So you would like to 'LOCK' down your dependency versions - which is done when you have a 'package-lock.json' file.
+So this file should be present and should be in version control.
+As a best practice commit 'package-lock.json' separate to your other commits.
+
 
 
 

@@ -30,5 +30,10 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "chalk": "^4.0.0",
+    "cross-env": "^7.0.2",
+    "json-server": "^0.16.1"
   }
 }
