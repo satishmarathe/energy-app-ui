@@ -97,7 +97,48 @@ as well as client side java script code.
 The present challenge is in swagger spec.
 
 #3.5
-CHALLENGE / TROUBLE : defining appropriate data types in Swagger
+CHALLENGE / TROUBLE / TODO : defining appropriate data types in Swagger
+
+#3.6
+CHALLENGE / TROUBLE : The other trouble we were having was : we were returning an array without array name.
+Ex:
+[
+  {
+    "id": 0,
+    ...
+  }
+]
+
+Now this was returning an array without an array name.
+We wanted to change it to:
+{
+  "energyBills": [
+    {
+      "id": 0,
+      ...
+    }
+  ]
+}
+
+So we had to make changes to the swagger spec to achieve the above.
+You can look at the following commit in github which is specific to achieving this:
+https://github.com/satishmarathe/energy-app-ui/commit/f4be97a2de12a6962f30ed712fa0addb3302a16b
+
+OLD SPEC:
+type: array
+	items:
+		$ref: '#/definitions/Energy'
+CHANGED SPEC:
+type: object
+	properties:
+		energyBills:
+			type: array
+				items:
+					$ref: '#/definitions/Energy'
+
+References:
+https://softwareengineering.stackexchange.com/questions/286293/whats-the-best-way-to-return-an-array-as-a-response-in-a-restful-api
+https://stackoverflow.com/questions/10164741/get-jsonarray-without-array-name
 
 #4
 Now that we have defined the swagger spec , we have defined the response structure.
@@ -108,18 +149,20 @@ We do not want to wait for the backend api to be developed and running to develo
 CHALLENGE / TROUBLE : How do we achieve this ?
 
 We have identified that we will need 'Json Server' for above requirement.
+We jave also identified that we will need 'JSON Schema Faker'
 Now we need to install this in our project.
 
-CHALLENGE / TROUBLE : how do we install 'Json Server' ?
+CHALLENGE / TROUBLE : how do we install 'Json Server' and 'JSON Schema Faker'?
 'Create react app' that we used to create our react app uses node and npm.
 Within the project we created is a file called : 'package.json'
 This file is like our maven pom file which will contain dependencies.
 
 We can define within this file 'dev dependencies' and 'production dependencies'
 
-We need the JSON server only in development.
+We need the JSON server and 'JSON Schema Faker' only in development.
 So here is the command we will use :
 npm install json-server --save-dev
+npm install json-schema-faker --save-dev
 
 This link was 'slightly' useful :
 https://dev.to/mariorodeghiero/json-server-with-reactjs-3chd
@@ -143,8 +186,27 @@ So you would like to 'LOCK' down your dependency versions - which is done when y
 So this file should be present and should be in version control.
 As a best practice commit 'package-lock.json' separate to your other commits.
 
+LEARNING: if someone else clones this repo - they will need to install all the packages / dependencies .
+To do this run the command : npm install
+This will install all the packages / dependencies on their machine.
+These dependencies get installed in a folder within your project called 'node_modules'
+
+Another interesting thing is GIT does not complain about this folder changing : 'node_modules'
+This is because in '.gitignore' this folder has been specified to be ignored !
+
+LEARNING: looking at 'node_modules' shows that 'express' , 'webpack' to be present.
+So probably CRA is automatically installing them.
+
+LEARNING: express is best if server side is also being developed in js ( node as one example ) 
+If server side is being developed in Non js technology ( java ) then express is overkill.
+
+#4.3
+We have decided on how we will 
 
 
 
 
 
+
+UNKNOWN AREAS:
+'npm shrinkwrap' , 'semver' , '^x.y.z'
