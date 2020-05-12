@@ -54,14 +54,16 @@ The editor has the option to save this template - so save a copy of this templat
 Next step is to open this saved off file in Swagger editor.
 In Swagger Editor >> File >> Import URL >> Import the spec
 Then directly make changes in the editor and save off the file which becomes our spec.
+NOTE: we have defined a single GET endpoint at this moment.
 
 #3.3
+CHALLENGE / TROUBLE : 
 Having trouble in defining the response for a GET 
 I want to return a JSON array.
 We did find an existing example in the swagger provided spec.
 BUT for future to remember is - that its not a big deal.
 To return an array all we have to do is wrap javascript objects in []
-Ex:
+Ex Response:
 [
   {
     "id": 1,
@@ -90,8 +92,9 @@ Ex:
 ]
 
 #3.4
+CHALLENGE / TROUBLE / TODO : 
 Now the next challenge we are facing is defining the appropriate data types in swagger.
-CHALLENGE / TROUBLE : what should the data types be used for 'Date' , 'Days' , 'Amount' , 'Comments'
+CHALLENGE / TROUBLE / TODO : what should the data types be used for 'Date' , 'Days' , 'Amount' , 'Comments'
 NOTE : we realised later that yes this is a design challenge but it will be more in server side code 
 as well as client side java script code.
 The present challenge is in swagger spec.
@@ -154,7 +157,7 @@ Now we need to install this in our project.
 
 CHALLENGE / TROUBLE : how do we install 'Json Server' and 'JSON Schema Faker'?
 'Create react app' that we used to create our react app uses node and npm.
-Within the project we created is a file called : 'package.json'
+Within the project we created(implictly) is a file called : 'package.json'
 This file is like our maven pom file which will contain dependencies.
 
 We can define within this file 'dev dependencies' and 'production dependencies'
@@ -174,7 +177,7 @@ We installed some additional dev dependencies :
 npm install chalk --save-dev
 npm install cross-env --save-dev
 
-CHALLENGE / TROUBLE : while trying to commit code we now see that a files called 'package-lock.json' has changed.
+CHALLENGE / TROUBLE : while trying to commit code we now see that a file called 'package-lock.json' has changed.
 We are not sure if this file needs to be checked in or not .
 Any changes we make in 'package.json' get registered in 'package-lock.json'
 It seems 'package-lock.json' is used to lock dependencies to a specific version number.
@@ -201,12 +204,232 @@ LEARNING: express is best if server side is also being developed in js ( node as
 If server side is being developed in Non js technology ( java ) then express is overkill.
 
 #4.3
-We have decided on how we will 
+We have decided on how we will get 'MOCKED' api responses.
+We will need to follow three steps:
+	Define the JSON SCHEMA ( rules ) of the response.
+	Use this SCHEMA and 'json-schema-faker' to generate the response which will be saved to a json file.
+	Use 'json server' to serve this generated json when a call is made to the endpoint.
+
+Lets get started !
+
+#4.3.1
+Here we will define the 'JSON SCHEMA':
+Create a js file within the folder 'buildScripts'
+
+LEARNING: CRA comes bundled with 'webpack' , 'babel'
+Reference:https://www.digitalocean.com/community/tutorials/how-to-set-up-a-react-project-with-create-react-app
+
+PROBLEM and LEARNING:
+We were not knowing how to run a script defined in 'package.json'
+The command to run the script is :
+npm run <script_name>
+
+PROBLEM and LEARNING:
+We were trying to run our script that was defined in 'package.json'
+We also now know the command to be used to run these scripts.
+However node / npm was complaining about 'unexpected token import'
+This was happening because in our script we had the following line:
+import chalk from "chalk";
+
+We are trying to run the script from node / npm 
+node / npm does NOT support ES6's import yet !!!
+so if you are running scripts from node you cannot use 'import' 
+
+rather you have to use :
+var chalk = require("chalk");
+
+Reference:https://stackoverflow.com/questions/39436322/node-js-syntaxerror-unexpected-token-import
+
+PROBLEM and LEARNING:
+Was getting an error 'console is undefined' while running our own script in 'package.json'
+This was happening because when we try to run the script , node is NOT implicitly used.
+In this case Windows was trying to run the js with its 'JScript engine' causing issues.
+So the solution was to prepend my script with 'node'
+Ex:
+"scripts": {
+    ...
+    "generate-mock-data": "generateMockData"
+  },
+
+This was changed to:
+"scripts": {
+    ...
+    "generate-mock-data": "node generateMockData"
+  },
+
+Reference: https://stackoverflow.com/questions/58651311/console-is-undefined-in-the-shell-by-using-webpack-with-node-js
+
+DESIGN DECISION:
+We now needed to place this custom script of ours within the project.
+So we were not quite sure on how to structure our code and folder location for our custom script.
+So we followed plural sight training of cory house and placed it in a folder called 'buildScripts' 
+This folder is created inside the root of our project.
+NOTE: Pluralsight course is NOT react specific , it is more around generic js 
+but we have gone ahead and mimiced the same structure in our react project.
+We then ran the script this way:
+node buildScripts/generateMockDataGetEnergyBills
+
+#4.3.2
+So at this stage we were just running through multiple issues .
+We have not even got to defining our schema .
+We are going to define the schema using the standards defined here:
+https://json-schema.org/
+
+Some amount of duplication here. We already have the swagger spec defined and now for mock we are again defining the schema.
+
+To define the schema we played around here till we got what we wanted:
+https://json-schema-faker.js.org/#gist/1f1196844bead96e021ffbd597edcffa
 
 
+Then the next step is to save this schema to a js file.
+It has to be defined as a js variable and exported.
+DESIGN DECISION:
+where do we place this schema file for our mock response.
+We decided to create a folder called 'api' within root of the project and placed this file here :
+\energy-app-ui\src\api\mockEnergyBillSchema.js
+
+So now we are ready with our schema file.
+
+#4.3.3
+We have the schema file which we will use with JSON Schema Faker.
+Reference URL for JSON Schema Faker:
+https://json-schema-faker.js.org/
+
+We have already defined a script called 'buildScripts/generateMockDataGetEnergyBills.js' above.
+
+However it is empty and really does not do anything.
+Now we will use the PS course and copy from it into this file.
+
+What is being done is really we are asking 'JSON Schema Faker' to use the schema file and write json output to a json file ! 
 
 
+PROBLEM and LEARNING:
+Couple of changes that we had to do were:
+In the schema file we had to change the variable definition.
+From:
+export const getEnergyBillSchema = {
+};
+
+We had to change it to :
+var getEnergyBillSchema = {
+};
+module.exports = getEnergyBillSchema;
+
+This had to be done because this is being written in a node environment not yet ES6 / Typescript
+
+PROBLEM and LEARNING:
+Then while trying to use the schema and generate json response : I am running into issues in the js at following line:
+var {getEnergyBillSchema} = require("../public/src/api/mockEnergyBillSchema.js");
+
+Error: Cannot find module '../public/src/api/mockEnergyBillSchema.js'
+
+So the change was:
+var getEnergyBillSchema = require("../src/api/mockEnergyBillSchema.js");
+
+So after this change run the command:
+npm run generate-getEnergyBills-mock-data
+
+So now we can see that the output json file is generated : db.json
+So using the 'schema' and 'json-schema-faker' we have generated our response in a file !!! 
+
+#4.3.4
+Now we will use the 'json server' to serve up the response:
+This is done by writing a startup script in package.json like this:
+"scripts": {
+	"start-mockapi": "json-server --watch src/api/db.json --port 3001"
+}
+
+We then invoke the script by running the following command on the console:
+npm run start-mockapi
+
+LEARNING:
+The script: "start-mockapi": "json-server --watch src/api/db.json --port 3001"
+Here we are starting the server and asking it to service requests by using the file 'src/api/db.json'
+In this case our GET request will be provided with a response from the file: 'src/api/db.json'
+
+We are also specifying that the server be started at port : 3001
+
+PROBLEM and LEARNING:
+"json-server requires at least version 10 of Node, please upgrade"
+
+So this means we need to upgrade our node ! which we did 
+( uninstalled node and reinstalled new node version )
+
+So at this stage we have our mocking API up and running and providing response !
+The mock server API end point is :
+http://localhost:3001/energyBills
+
+PROBLEM:
+Swagger spec endpoint is /energy BUT mock api is exposing it as /energyBills
+
+#4.3.5
+We want the mock data to be regenrated everytime we start the mock server.
+To achieve this we will define an additional script :
+Before:
+"scripts": {
+	...
+	"generate-getEnergyBills-mock-data": "node buildScripts/generateMockDataGetEnergyBills",
+	"start-mockapi": "json-server --watch src/api/db.json --port 3001"
+	...
+}
+
+Now:
+"scripts": {
+	...
+	"generate-getEnergyBills-mock-data": "node buildScripts/generateMockDataGetEnergyBills"
+	"prestart-mockapi": "npm run generate-getEnergyBills-mock-data"
+	"start-mockapi": "json-server --watch src/api/db.json --port 3001"
+	...
+}
+
+LEARNING:
+In Node 'convention' is being used here .
+when we run the script :
+npm run start-mockapi then node will ALWAYS run any script it finds which has the same name as the script we are running if appended
+with a 'pre'
+
+so whenever we run the script : start-mockapi
+node will first run the script : prestart-mockapi
+
+As a result whenever we start the json server the json response is regenrated prior to server startup.
+
+#4.3.6
+We now finally also want to start our mock server everytime we run our app. ( run app and mock server in parallel )
+To do this we first needed to install a utility called 'concurrently'
+npm install concurrently --save-dev
+
+'Concurrently' is a utility that allows us to execute tasks in parallel
+
+Then we modified the scripts section 
+We can achieve this by adding our 'start-mockapi' into our application start script.
+LEARNING:
+Before:
+"scripts": {
+	"start": "react-scripts start",
+	"start-mockapi": "json-server --watch src/api/db.json --port 3001",
+	...
+}
+
+After:
+"scripts": {
+	"start": "react-scripts start",
+	"start-mockapi": "json-server --watch src/api/db.json --port 3001",
+	...
+	"dev": "concurrently \"npm start\" \"npm run start-mockapi\""
+}
+
+So we added an additional script and named it "dev"
+what it is doing is it is using 'concurrently' to start react app ( by calling 'start') as well as start mock server
+( by calling 'start-mockapi' ) 
+
+References:
+https://medium.com/@joelazarz/using-concurrently-with-json-server-and-your-react-app-3d07487acc50
+
+LEARNING:
+'json-server' can even be used to create / edit / delete data and it will get saved in the json file.
+It actually serves like a database !!!
 
 
+-----------------------------------------------------------------------------------------------------
 UNKNOWN AREAS:
 'npm shrinkwrap' , 'semver' , '^x.y.z'

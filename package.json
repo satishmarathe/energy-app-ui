@@ -14,7 +14,11 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "generate-getEnergyBills-mock-data": "node buildScripts/generateMockDataGetEnergyBills",
+    "prestart-mockapi": "npm run generate-getEnergyBills-mock-data",
+    "start-mockapi": "json-server --watch src/api/db.json --port 3001",
+    "dev": "concurrently \"npm start\" \"npm run start-mockapi\""
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -33,6 +37,7 @@
   },
   "devDependencies": {
     "chalk": "^4.0.0",
+    "concurrently": "^5.2.0",
     "cross-env": "^7.0.2",
     "json-schema-faker": "^0.5.0-rcv.24",
     "json-server": "^0.16.1"
