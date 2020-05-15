@@ -429,6 +429,40 @@ LEARNING:
 'json-server' can even be used to create / edit / delete data and it will get saved in the json file.
 It actually serves like a database !!!
 
+#5
+We now have an API ready that is serving us the response.
+It is now time to start developing React code to interact with this API.
+CHALLENGE / TROUBLE :
+How do we design and develop the React UI to talk to an API and display ?
+
+#5.1
+Slight diversion , we are looking at Cory House course on 'Flux and React' and so we 
+will install some additional dev dependencies which will be required in future.
+We will install 'flux' , 'react-router', 'bootstrap'
+Command is :
+npm install flux react-router bootstrap --save-dev
+
+CHALLENGE / TROUBLE :
+After doing this install we get following warning:
+'found 2 vulnerabilities (1 low, 1 high)
+ run `npm audit fix` to fix them, or `npm audit` for details'
+
+#5.2
+Cleanup of create-react-app:
+We used the ready to use 'create-react-app' template to create our project.
+However it comes with additional advanced things that we are not ready for.
+So we will delete the following files from our project:
+deleted:    src/App.css
+deleted:    src/App.js
+deleted:    src/App.test.js
+deleted:    src/index.css
+deleted:    src/logo.svg
+deleted:    src/serviceWorker.js
+deleted:    src/setupTests.js
+
+Also we will remove all the content from the file: src/index.js
+This file contained the code provided by 'create-react-app' which shows React's electron like screen.
+We dont need this as we will be building our own application !
 
 -----------------------------------------------------------------------------------------------------
 UNKNOWN AREAS:
