@@ -506,6 +506,27 @@ The option till now has been to wrap everything within a <div> tag.
 However if we use <React.Fragment></React.Fragment> to enclose then react will not render
 an additional <div> tag which is unnecessary anyway.
 
+#5.5
+Now we will do simple navigation between pages.
+To do this we will add a new page called : App.js
+This page will act like a 'Router'
+In this page we read the browser url path and depending on path return appropriate page.
+If the path is 'about' then it will return 'About' page.
+In all other cases it will return 'HomePage'
+
+This is just the setup .
+It has not yet been used, which we will do next.
+
+#5.6
+In our entry point page : index.js we will now render the 'App.js'
+
+ReactDOM.render(<App/>,document.getElementById("root"));
+Now the 'App' component is rendered and since the default page to show is 'HomePage' it will show the HomePage.
+Next we need a link in homepage to go to About Page.
+
+#5.7
+Simply add a <a href /> to the Home Page that links to the 'AboutPage'
+
 -----------------------------------------------------------------------------------------------------
 UNKNOWN AREAS:
 'npm shrinkwrap' , 'semver' , '^x.y.z'
