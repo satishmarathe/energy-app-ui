@@ -464,6 +464,48 @@ Also we will remove all the content from the file: src/index.js
 This file contained the code provided by 'create-react-app' which shows React's electron like screen.
 We dont need this as we will be building our own application !
 
+#5.3
+Now finally we will begin writing some react code !
+
+LEARNING:
+when we write code like :
+import React from "react";
+
+The above is an example of using imports which were added to ES2015
+This line says 'import an npm package called react and set it to a variable called 'react''
+
+LEARNING:
+React Component names should begin with a Capital letter.
+React assumes that anything that starts with Capital letters is a 'component'
+
+LEARNING:
+By default when we write our components in files are private .
+This is because 'create-react-app' is configured to use 'modules'
+and as a result everything is private.
+This is why they need to be 'exported'
+
+CODE STRUCTURE:
+All of our code we will write in a new directory called 'components'
+This will be located here :
+<project_root>\src\components
+
+#5.3.1
+Here we will write our first React Component that will be the HomePage.
+This is standard stuff.
+So we now have created some structure for our code and we have written our first simple landing page.
+
+#5.4
+We have one React Page created which is the landing page.
+We will create another page : 'About'
+Both these pages really do nothing but they will be a starting point.
+We are just getting things ready before the action starts.
+
+LEARNING:
+We know that if we have muliple lnes of JSX to be returned they need to be wrapped in a parent level tag.
+The option till now has been to wrap everything within a <div> tag.
+However if we use <React.Fragment></React.Fragment> to enclose then react will not render
+an additional <div> tag which is unnecessary anyway.
+
 -----------------------------------------------------------------------------------------------------
 UNKNOWN AREAS:
 'npm shrinkwrap' , 'semver' , '^x.y.z'
