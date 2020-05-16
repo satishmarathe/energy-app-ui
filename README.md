@@ -526,6 +526,62 @@ Next we need a link in homepage to go to About Page.
 
 #5.7
 Simply add a <a href /> to the Home Page that links to the 'AboutPage'
+Now when we load the application by default we will see the HomePage.
+When we click on the link to 'About' it will go to AboutPage.
+
+#5.8
+Next we will define a Header component which will contain links to other pages.
+This will act as the header for our web page.
+
+LEARNING:
+We used '<nav>' elements.
+Ex:
+<nav>
+	<a href="/">Home</a> | <a href="/about">About</a>
+</nav>
+
+LEARNING:
+In java script a function can be embedded inside another function !
+Ex:
+function Parent(){
+	function Child(){}
+   return(
+	{Child()}
+   );
+}
+
+#5.8.1
+Now we will use the Header in our main component 'App.js'
+So by doing this we will achieve the fact that the 'Header' will always show .
+The actual page to display will be based on the link we click.
+This is the code :
+function App(){
+    function getPage(){
+        /** get the browser url path details and then dtermine which page to got to */
+        const route = window.location.pathname;
+        if(route === "/about"){
+            return <AboutPage/>;
+        }else{
+            return <HomePage/>;
+        }
+    }
+            
+    return(
+        <React.Fragment>
+            <Header/>
+            {getPage()}
+        </React.Fragment>
+    );  
+}
+
+CONCLUSION:
+We now have a main Page ( App.js ) , which displays a header with two links.
+The two links take us to the appropriate page.
+So we also have two simple pages that we can navigate to .
+Thats all till now.
+
+#6
+In earlier section
 
 -----------------------------------------------------------------------------------------------------
 UNKNOWN AREAS:
