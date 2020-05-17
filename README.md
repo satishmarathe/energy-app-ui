@@ -581,8 +581,28 @@ So we also have two simple pages that we can navigate to .
 Thats all till now.
 
 #6
-In earlier section
+In this section we will now gradually start interacting with the API .
+To do this we will first define a component that will display the list of bills.
+So this page will render the JSON response which will be an array containing 0..n elements.
 
+DESIGN CHALLENGE:
+Does our server side return all records or does it paginate ?
+
+#6.1
+First we will define a new ReactComponent to show list of EnergyBills : EnergyBills.js
+This page will be defined in : <project_root>\src\components\EnergyBills.js
+NOTE : This will be a 'Class component'
+For now simply return a simple <h3> element in it 
+
+#6.2
+Then in the header add a simple link to this new page so it shows up on the page 
+
+#6.3
+Now add this reference in our routing page : App.js 
+This will be used to determine when to show the 'EnergyBillsPage'
+
+#6.4
+Now comes the part where we will start pulling the JSON data !
 -----------------------------------------------------------------------------------------------------
 UNKNOWN AREAS:
 'npm shrinkwrap' , 'semver' , '^x.y.z'
