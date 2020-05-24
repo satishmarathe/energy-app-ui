@@ -43,10 +43,33 @@ class EnergyBillsPage extends React.Component{
                 { energyBillsArray: getListOfEnergyBills() }
            );        
    }
-    render(){
-        
+    render(){ 
+        console.log(this.state.energyBillsArray) ;      
         return(
-            <h3>Energy Bills1</h3>
+            <React.Fragment>
+            <h3>Energy Bills</h3>
+            <table className="table">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Author ID</th>
+                        <th>Category</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {this.state.energyBillsArray.map((energyBill) => {
+                        console.log(energyBill);
+                        return <tr>
+                            <td>{energyBill.id}</td>
+                            <td>{energyBill.vendor}</td>
+                            <td>{energyBill.days}</td>
+                        </tr>
+
+                    })}
+                </tbody>
+            </table>
+            </React.Fragment>
         );
     }
 }
