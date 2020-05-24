@@ -4,6 +4,7 @@ const baseUrl = process.env.REACT_APP_API_URL + "/energyBills/";
 
 /** this function will retrieve the list of energy bills */
 export function getListOfEnergyBills(){
+    console.log("about to call api");
     /**
     axios.get(baseUrl)
         .then((data) => console.log(data));
@@ -17,4 +18,5 @@ export function getListOfEnergyBills(){
         console.log(JSON.stringify(data));
         return JSON.stringify(data);
     })
+    console.log("after making the call to the api")
 }
