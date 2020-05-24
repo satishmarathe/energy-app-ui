@@ -501,7 +501,7 @@ Both these pages really do nothing but they will be a starting point.
 We are just getting things ready before the action starts.
 
 LEARNING:
-We know that if we have muliple lnes of JSX to be returned they need to be wrapped in a parent level tag.
+We know that if we have muliple lines of JSX to be returned they need to be wrapped in a parent level tag.
 The option till now has been to wrap everything within a <div> tag.
 However if we use <React.Fragment></React.Fragment> to enclose then react will not render
 an additional <div> tag which is unnecessary anyway.
@@ -603,6 +603,76 @@ This will be used to determine when to show the 'EnergyBillsPage'
 
 #6.4
 Now comes the part where we will start pulling the JSON data !
+
+#7
+Now we will get started with making API calls.
+First for this call we will use the library 'axios'
+
+DESIGN CHALLENGE:
+How do we install 'axios' ? , should it be installed globally or only in development ?
+It should NOT be installed as a dev dependency.
+It should be installed as a global dependency since it is used in the application and NOT only as a development tool.
+https://stackoverflow.com/questions/48288032/axios-dependencies-or-devdependencies/48288100
+
+#7.1
+Now lets start using 'axios' to consume the REST API.
+
+LEARNINGS:
+Axios always returns data in a property called 'data' , which is why we use 'spread' {data} to extract it
+from the response that Axios returns.
+
+If we need to display data when page loads then the API call MUST be done in the lifecycle method of react:
+'componentDidMount'
+This is required since component must be mounted before we can set its state with data from API
+
+QUESTION & LEARNING:
+why do we use 'JSON.stringify(data)' on the data returned from API call ?
+'JSON.stringify' converts a JSON object into a JSON string.
+'JSON.parse' converts a JSON string into a JSON object.
+However we are still not clear on this part...
+
+LEARNINGS:
+We used a useful utility package called 'cross-env' to inject environment variables.
+We did it in package.json the following way:
+"start": "cross-env REACT_APP_API_URL=http://localhost:3001 react-scripts start",
+
+In above example we have injected the environment variable:
+cross-env REACT_APP_API_URL=http://localhost:3001
+
+The way to use this environment variable in code is:
+const baseUrl = process.env.REACT_APP_API_URL;
+
+LEARNINGS:
+We have used a Class component provided by React.
+Class component extends React.Component
+IN class based ocmponents 'state' MUST be initialised in constructor.
+Constructor accepts 'props' as parameter.
+The first line in constructor MUST be a call to : super(props)
+State can be initialised in constructor.
+When we want to load data from API when page loads the best place to do that 
+is in the method: componentDidMount
+This method is called immediately after the component is mounted.
+The component MUST be mounted before state is set.
+
+LEARNING:
+to set state the method to be called is :setState
+This is the ONLY way to set state.
+setState will only modify the attributes that you specify.
+If more than one attribute is present in 'state' and you use 'setState' to only change 
+one attribute then ONLY one attribute value will change.
+
+LEARNING:
+The way to use 'axios' to call an api is:
+axios.get(baseUrl).then(
+({data}) => {
+	return JSON.stringify(data);
+});
+
+Axios is 'promise' based and is asynchronous.
+If a promise is fulfilled 'then' is used to handle the response.
+If a promise is NOT fulfilled 'catch' is used to handle the response.
+
+
 -----------------------------------------------------------------------------------------------------
 UNKNOWN AREAS:
 'npm shrinkwrap' , 'semver' , '^x.y.z'
