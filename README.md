@@ -645,7 +645,7 @@ const baseUrl = process.env.REACT_APP_API_URL;
 LEARNINGS:
 We have used a Class component provided by React.
 Class component extends React.Component
-IN class based ocmponents 'state' MUST be initialised in constructor.
+IN class based components 'state' MUST be initialised in constructor.
 Constructor accepts 'props' as parameter.
 The first line in constructor MUST be a call to : super(props)
 State can be initialised in constructor.
@@ -672,7 +672,25 @@ Axios is 'promise' based and is asynchronous.
 If a promise is fulfilled 'then' is used to handle the response.
 If a promise is NOT fulfilled 'catch' is used to handle the response.
 
+#7.2
+So now we will be making the API call in our react code.
+LEARNING:
+setState MUST be called after the component is mounted and 'componentDidMount' is guaranteed to be called 
+after component is mounted.
+So we will call the API in this method 'componentDidMount' and with response call 'setState'
 
+LEARNING:
+First 'render' is called and then 'componentDidMount'
+
+LEARNING:
+whenever 'setState' is called this will cause 'render' to be invoked again.
+
+#7.3
+So till now we have initialised 'state' in 'constructor' and we have populated state with api response data
+in the method 'componentDidMount'
+However we have not yet rendered this API data.
+This will be done in the method 'render'
+This is how we display API data !
 -----------------------------------------------------------------------------------------------------
 UNKNOWN AREAS:
 'npm shrinkwrap' , 'semver' , '^x.y.z'

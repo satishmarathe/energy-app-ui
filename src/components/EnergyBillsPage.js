@@ -1,5 +1,6 @@
 import React from "react";
 import {getListOfEnergyBills} from "../api/energyBillsApi.js";
+import axios from "axios";
 
 
 class EnergyBillsPage extends React.Component{
@@ -12,8 +13,10 @@ class EnergyBillsPage extends React.Component{
 
         /** now declate state */
         this.state = {
+            isLoaded: false,
             /** we will getback an array of Energy Bills so we define a property to hold an array */
             energyBillsArray: []
+            
         }
     }
 
@@ -22,6 +25,7 @@ class EnergyBillsPage extends React.Component{
      *  This method is called immediately after the component is mounted
     */
    componentDidMount(){
+       console.log("<<< inside componentDidMount >>>")
        /** this is the proper lifecycle method for making api calls
         *  the component MUST be mounted before the state is set
         *  since the component is mounted before this below api run is done we can set state here
@@ -39,12 +43,20 @@ class EnergyBillsPage extends React.Component{
            /**
            console.log(energyBillsResponseFromApi);
           **/
-           this.setState(
-                { energyBillsArray: getListOfEnergyBills() }
-           );        
+         /** define the endpoint to be called */
+        const baseUrl = process.env.REACT_APP_API_URL + "/energyBills/";
+        axios.get(baseUrl).then(({data}) => {
+            //console.log(data);
+            //console.log(JSON.stringify(data));
+            this.setState(
+                { energyBillsArray: data }
+           );            
+        })
+                   
    }
     render(){ 
-        console.log(this.state.energyBillsArray) ;      
+        console.log("@@@ inside render array is @@@",this.state.energyBillsArray)
+        //console.log(this.state.energyBillsArray) ;      
         return(
             <React.Fragment>
             <h3>Energy Bills</h3>
@@ -59,12 +71,12 @@ class EnergyBillsPage extends React.Component{
 
                 <tbody>
                     {this.state.energyBillsArray.map((energyBill) => {
-                        console.log(energyBill);
-                        return <tr>
+                        //console.log(energyBill);
+                        return (<tr>
                             <td>{energyBill.id}</td>
                             <td>{energyBill.vendor}</td>
                             <td>{energyBill.days}</td>
-                        </tr>
+                        </tr>);
 
                     })}
                 </tbody>
