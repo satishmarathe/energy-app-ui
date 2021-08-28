@@ -12,47 +12,61 @@ var getEnergyBillSchema = {
     "definitions": {
       "Energy": {
         "type": "object",
-        "required": [ "id", "vendor" ],
+        "required": [ "id" ],
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "The id of the vegetable."
-          },
-          "vendor": {
-            "type": "string",
-            "description": "Energy provider"
           },
           "fromDate": {
             "type": "string",
-            "description": "Billing start Date"
+            "format": "date",
+            "description": "To Date"
           },
           "toDate": {
             "type": "string",
+            "format": "date",
             "description": "Billing end Date"
           },
           "days": {
-            "type": "string",
+            "type": "integer",
             "description": "Number of Billing days"
           },
-          "receivedDate": {
-            "type": "string",
-            "description": "Date when Bill was received"
+          "fromReading": {
+            "type": "number",
+            "description": "Meter reading start"
           },
-          "dueDate": {
-            "type": "string",
-            "description": "Date when Bill is due"
+          "toReading": {
+            "type": "number",
+            "description": "Meter reading end"
           },
-          "oaidDate": {
-            "type": "string",
-            "description": "Date when Bill was paid"
+          "m3": {
+            "type": "number",
+            "description": "Volumetric consumption"
           },
-          "billAmount": {
-            "type": "string",
-            "description": "Billing amount"
+          "heatingValue": {
+            "type": "number",
+            "description": "Calorific value of gas"
           },
-          "comments": {
-            "type": "string",
-            "description": "Comments about this bill"
+          "pressure": {
+            "type": "number",
+            "description": "Pressure Value"
+          },
+          "mj": {
+            "type": "number",
+            "description": "Usage in MJ"
+          },
+          "usageCost": {
+            "type": "number",
+            "description": "Calculated value of cost based on usage"
+          },
+          "dailySupplyCost": {
+            "type": "number",
+            "description": "Daily rate"
+          },
+          "totalCost": {
+            "type": "number",
+            "description": "Total Bill Amount"
           }
         }
       }

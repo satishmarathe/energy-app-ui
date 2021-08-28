@@ -1,6 +1,8 @@
 import React from "react";
 import {getListOfEnergyBills} from "../api/energyBillsApi.js";
 import axios from "axios";
+import Form from 'react-bootstrap/Form';
+import EnergyBillForm from "./EnergyBillForm.js"
 
 
 class EnergyBillsPage extends React.Component{
@@ -59,13 +61,24 @@ class EnergyBillsPage extends React.Component{
         //console.log(this.state.energyBillsArray) ;      
         return(
             <React.Fragment>
+            <EnergyBillForm onSubmitAddBillCallback={this.onSubmitAddBillCallback} />
             <h3>Energy Bills</h3>
             <table className="table">
                 <thead>
                     <tr>
-                        <th>Title</th>
-                        <th>Author ID</th>
-                        <th>Category</th>
+                        <th>Sr#</th>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Days</th>
+                        <th>Reading from</th>
+                        <th>Reading to</th>
+                        <th>m3</th>
+                        <th>HV</th>
+                        <th>PV</th>
+                        <th>MJ</th>
+                        <th>Usage cost</th>
+                        <th>supply Cost</th>
+                        <th>Total cost</th>
                     </tr>
                 </thead>
 
@@ -74,8 +87,18 @@ class EnergyBillsPage extends React.Component{
                         //console.log(energyBill);
                         return (<tr>
                             <td>{energyBill.id}</td>
-                            <td>{energyBill.vendor}</td>
+                            <td>{energyBill.fromDate}</td>
+                            <td>{energyBill.toDate}</td>
                             <td>{energyBill.days}</td>
+                            <td>{energyBill.fromReading}</td>
+                            <td>{energyBill.toReading}</td>
+                            <td>{energyBill.m3}</td>
+                            <td>{energyBill.heatingValue}</td>
+                            <td>{energyBill.pressure}</td>
+                            <td>{energyBill.mj}</td>
+                            <td>{energyBill.usageCost}</td>
+                            <td>{energyBill.dailySupplyCost}</td>
+                            <td>{energyBill.totalCost}</td>                            
                         </tr>);
 
                     })}
@@ -83,6 +106,100 @@ class EnergyBillsPage extends React.Component{
             </table>
             </React.Fragment>
         );
+    }
+
+    onSubmitAddBillCallback = (energyBillRecord) => {
+        console.log("<<<<<< am I getting called ? >>>>>> ",energyBillRecord);
+
+        /** now calculate bill  */
+
+        /** calculate number of days  */
+        var dateFrom = new Date(energyBillRecord.fromDate);
+        var dateTo = new Date(energyBillRecord.toDate);
+
+        var noOfDays = Math.abs(dateTo - dateFrom)/((1000 * 60 * 60 * 24));
+        /** hack to add one more day  */
+        noOfDays = noOfDays + 1;
+
+        /** set the number of days  */
+        energyBillRecord["days"] =  noOfDays;
+
+        /** calculate usage  in m3 */
+        var usageInM3 = parseInt(energyBillRecord.toReading)- parseInt(energyBillRecord.fromReading);
+
+       
+         /** set usage  in m3 */
+        energyBillRecord["m3"] =  usageInM3 ;
+
+        /** usage in MJ **/ 
+        var usageInMJ = (usageInM3 * parseFloat(energyBillRecord.heatingValue) 
+        * parseFloat(energyBillRecord.pressure)).toFixed(2);
+
+         /** set usage  in MJ */
+         energyBillRecord["mj"] =  usageInMJ ;
+
+        /** step 1 and step 2 usage rate and daily supply rate*/
+        var step1Rate = 0.0209;
+        var step2Rate = 0.0154;
+        var step1Limit = 100;
+        var dailySupplyRate = 0.682
+
+        /** calculate step 1 cost  */
+        var step1Cost = step1Rate * noOfDays * step1Limit;
+        
+        /** calculate step 2 cost  */
+        var step2Cost = step2Rate * (usageInMJ - (noOfDays * step1Limit));
+
+        /** calculate daily supply cost  */
+        var dailySupplyCost = dailySupplyRate * noOfDays;
+
+        /** calculate total cost */
+        var totalCost = step1Cost + step2Cost + dailySupplyCost ;
+        
+        /** set costs in object */
+        energyBillRecord["usageCost"] =  (step1Cost + step2Cost).toFixed(2) ;
+
+        energyBillRecord["dailySupplyCost"] =  dailySupplyCost.toFixed(2) ;
+
+        energyBillRecord["totalCost"] =  totalCost.toFixed(2) ;
+
+        console.log("number of days = " ,(Math.abs(dateTo - dateFrom))/((1000 * 60 * 60 * 24)));
+        /** once on the UI we have added a survey we need to update the state  */
+        this.setState(
+                        {
+                            energyBillsArray: [...this.state.energyBillsArray, energyBillRecord],
+                            isLoaded: true
+                        }
+        );
+        
+        /** next step is to make a call to REST API to save in backend */
+        console.log("<<<<< call to REST API to ADD energy bill record goes here >>>>>>>>>>");
+        /** lets first try and delete from JSON Server , later we will switch to actual Spring boot endpoint */
+        //const baseUrl = process.env.REACT_APP_API_URL + "/api/v1/surveys/" + surveyRecord.treeId;
+        const baseUrl = process.env.REACT_APP_API_URL + "/api/v1/energyBills";
+        
+        console.log(baseUrl)
+
+        axios.post(baseUrl,{
+                            "id": energyBillRecord.id,
+                            "fromDate":energyBillRecord.fromDate,
+                            "toDate": energyBillRecord.toDate,
+                            "days": '',
+                            "fromReading": energyBillRecord.fromReading,
+                            "toReading": energyBillRecord.toReading,
+                            "m3": '',
+                            "heatingValue": energyBillRecord.heatingValue,
+                            "pressure": energyBillRecord.pressure,
+                            "mj" : '',
+                            "usageCost": '',
+                            "dailySupplyCost": '',
+                            "totalCost": ''                                                   
+                        })
+        .then(data => {
+            console.log(data)
+        }).catch(error => {
+            console.log(error);
+        });  
     }
 }
 export default EnergyBillsPage;

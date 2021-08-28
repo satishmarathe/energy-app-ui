@@ -1,0 +1,4 @@
+{
+    "/api/v1/energyBills": "/energyBills",
+    "/api/v1/energyBills/:id": "/energyBills/:id"
+}

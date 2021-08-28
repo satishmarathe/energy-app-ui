@@ -2,6 +2,7 @@ import React from "react";
 import AboutPage from "./AboutPage.js";
 import HomePage from "./HomePage.js";
 import EnergyBillsPage from "./EnergyBillsPage.js";
+import EnergyComparison from "./EnergyComparison.js";
 import Header from "../common/Header.js";
 
 function App(){
@@ -12,6 +13,8 @@ function App(){
             return <AboutPage/>;
         }else if(route === "/courses"){
             return <EnergyBillsPage/>;
+        }else if(route === "/compare"){
+            return <EnergyComparison/>;
         }else{
             return <HomePage/>;
         }

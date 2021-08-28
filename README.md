@@ -592,7 +592,7 @@ Does our server side return all records or does it paginate ?
 First we will define a new ReactComponent to show list of EnergyBills : EnergyBills.js
 This page will be defined in : <project_root>\src\components\EnergyBills.js
 NOTE : This will be a 'Class component'
-For now simply return a simple <h3> element in it 
+For now simply return a simple <h3 /> element in it 
 
 #6.2
 Then in the header add a simple link to this new page so it shows up on the page 
@@ -691,6 +691,28 @@ in the method 'componentDidMount'
 However we have not yet rendered this API data.
 This will be done in the method 'render'
 This is how we display API data !
+
+## 8 Adding a Data entry Form 
+To use data entry forms we will use : <b>react-bootstrap</b>
+This utility has the components to build UI components required in a form. 
+
+### 8.1 Adding 'react-bootstrap' to our project
+Execute the following command :
+```node-js
+npm install --save react-bootstrap
+```
+This will add 'react-bootstrap' as a 'dependency' in your package.json file. Now we are good to go!
+
+### 8.2 Using 'react-bootstrap' in our code: 
+As with all of react to use it we need to import it :
+```react
+import Form from 'react-bootstrap/Form';
+```
+here we are importing 'Form' from 'react-bbotstrap'
+
+
+
+a
 -----------------------------------------------------------------------------------------------------
 UNKNOWN AREAS:
 'npm shrinkwrap' , 'semver' , '^x.y.z'
