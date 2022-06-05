@@ -3,6 +3,7 @@ import AboutPage from "./AboutPage.js";
 import HomePage from "./HomePage.js";
 import EnergyBillsPage from "./EnergyBillsPage.js";
 import EnergyComparison from "./EnergyComparison.js";
+import EnergyComparisonAgain from "./EnergyComparisonAgain.js";
 import Header from "../common/Header.js";
 
 function App(){
@@ -15,7 +16,9 @@ function App(){
             return <EnergyBillsPage/>;
         }else if(route === "/compare"){
             return <EnergyComparison/>;
-        }else{
+        }else if(route === "/compareAgain"){
+            return <EnergyComparisonAgain/>;
+        }        else{
             return <HomePage/>;
         }
     }

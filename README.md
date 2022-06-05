@@ -1,5 +1,4 @@
-#1
-Create a React app .
+## 1 Create a React App 
 
 #1.1
 what will we name it as ?
@@ -592,7 +591,7 @@ Does our server side return all records or does it paginate ?
 First we will define a new ReactComponent to show list of EnergyBills : EnergyBills.js
 This page will be defined in : <project_root>\src\components\EnergyBills.js
 NOTE : This will be a 'Class component'
-For now simply return a simple <h3 /> element in it 
+For now simply return a simple h3 element in it 
 
 #6.2
 Then in the header add a simple link to this new page so it shows up on the page 
@@ -710,9 +709,65 @@ import Form from 'react-bootstrap/Form';
 ```
 here we are importing 'Form' from 'react-bbotstrap'
 
+## xx2 Installing and running an existing React App 
 
+### xx2.1 Checkout code from github 
+Use standard git commands to clone repo locally
 
-a
+### xx2.2 Local install 
+In Gitbash at root of project run the command :
+```node-js
+npm install
+```
+This will install dependencies from package.json
+
+### xx2.3 Run project 
+In Gitbash at root of project run the command :
+```node-js
+npm install
+```
+This will install dependencies from package.json
+
+## xx3 Google Drive dependency details
+
+### xx3.1 Details
+The Google sheet we are connecting to is : 
+```node-js
+Utility_Bill_calculations_cathies_lane
+Sheets used are : 'Gas_Globird' and 'demo'
+```
+Refer to this excellent article on how to use react with Google sheets:
+```node-js
+https://dev.to/calvinpak/how-to-read-write-google-sheets-with-react-193l
+https://developers.google.com/workspace/guides/get-started
+```
+### xx3.1 Asynchronous nature of retrieving data from Google sheets
+LEARNING:
+the google sheet call was :
+
+  ```node-js
+stepsSheet.getRows().then((stepRows) =>{ 
+   /** do some processing **/
+});
+
+this.setState({ operatingCostArray: opexArray });
+```
+
+This itself is a synchronous call .
+My problem was I was using setState OUTSIDE of this block with the assumption that this code
+will execute synchronously i.e. iterating of for loop and then we can setState with results.
+However I did not realise that this call ( getRows().then) itself is asynchronous
+
+So this was the solution:
+  ```node-js
+stepsSheet.getRows().then((stepRows) =>{ 
+   /** do some processing **/
+   /** set state inside and NOT outside **/
+   this.setState({ operatingCostArray: opexArray });
+
+});
+
+```
 -----------------------------------------------------------------------------------------------------
 UNKNOWN AREAS:
 'npm shrinkwrap' , 'semver' , '^x.y.z'
